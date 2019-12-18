@@ -15,4 +15,9 @@ public class LoginResponsePacket extends Packet{
     public Byte getCommand() {
         return Command.LOGIN_RESPONSE;
     }
+
+    @Override
+    public Strategy getStrategy() {
+        return new LoginResponseStrategy();
+    }
 }

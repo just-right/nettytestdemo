@@ -28,31 +28,9 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
         ByteBuf buffer = (ByteBuf)msg;
         PacketCode packetCode = new PacketCode();
         Packet packet = packetCode.decode(buffer);
-
-        if (packet instanceof LoginResponsePacket){
-            LoginResponsePacket responsePacket = (LoginResponsePacket)packet;
-            if (responsePacket.isSuccess()){
-                AttributeKey<String> nameAttrKey = AttributeKey.valueOf("userName");
-                AttributeKey<String> pwdAttrKey = AttributeKey.valueOf("passWord");
-                AttributeKey<Boolean> loginSuccessAttrKey = AttributeKey.valueOf("loginSuccess");
-                ctx.channel().attr(nameAttrKey).set(responsePacket.getUserName());
-                ctx.channel().attr(pwdAttrKey).set(responsePacket.getPassWord());
-                ctx.channel().attr(loginSuccessAttrKey).set(true);
-                System.out.println("登录成功！");
-                //发送消息给服务端
-                sendMsgToServer(ctx);
-
-            }else {
-                ctx.channel().attr(AttributeKey.newInstance("loginSuccess")).set(false);
-                System.out.println("登录失败，失败原因："+responsePacket.getReason());
-            }
-            //this.loginRequest(ctx,"user-","password");
-        }else if(packet instanceof MessageResponsePacket){
-            MessageResponsePacket responsePacket = (MessageResponsePacket)packet;
-            String message = responsePacket.getMessage();
-            System.out.println(new Date()+"：收到服务端新消息："+message);
-            this.sendMsgToServer(ctx);
-        }
+        StrategyContext clientContext = new StrategyContext();
+        clientContext.setStrategy(packet.getStrategy());
+        clientContext.runStrategyMethod(ctx,packet);
     }
 
 
@@ -95,17 +73,4 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
         ctx.channel().writeAndFlush(buffer);
     }
 
-
-
-    private void sendMsgToServer(ChannelHandlerContext ctx){
-        PacketCode packetCode = new PacketCode();
-        MessageRequestPacket requestPacket = new MessageRequestPacket();
-        Scanner scanner = new Scanner(System.in);
-        String msg = scanner.nextLine();
-        requestPacket.setMessage(msg);
-        ByteBuf buffer = packetCode.encode(requestPacket);
-        ctx.channel().writeAndFlush(buffer);
-
-
-    }
 }

@@ -13,4 +13,9 @@ public class MessageRequestPacket extends Packet{
     public Byte getCommand() {
         return Command.MESSAGE_REQUEST;
     }
+
+    @Override
+    public Strategy getStrategy() {
+        return new MessageRequestStrategy();
+    }
 }

@@ -14,4 +14,9 @@ public class LoginRequestPacket extends Packet{
     public Byte getCommand() {
         return Command.LOGIN_REQUEST;
     }
+
+    @Override
+    public Strategy getStrategy() {
+        return new LoginRequestStrategy();
+    }
 }
