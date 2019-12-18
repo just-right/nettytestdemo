@@ -3,9 +3,7 @@ package server;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.util.AttributeKey;
 import protocol.*;
-import sun.rmi.runtime.Log;
 
 import java.nio.charset.Charset;
 import java.util.Date;
@@ -41,7 +39,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             MessageResponsePacket responsePacket = new MessageResponsePacket();
             responsePacket.setVersion(requestPacket.getVersion());
             System.out.println(new Date()+"：收到客户端消息："+requestPacket.getMessage());
-            responsePacket.setMessage("你好！");
+            responsePacket.setMessage("我赞同！");
             ByteBuf resBuffer = packetCode.encode(responsePacket);
             ctx.channel().writeAndFlush(resBuffer);
         }
