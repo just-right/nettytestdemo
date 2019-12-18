@@ -4,13 +4,11 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.AttributeKey;
-import protocol.LoginRequestPacket;
-import protocol.LoginResponsePacket;
-import protocol.Packet;
-import protocol.PacketCode;
+import protocol.*;
 import sun.rmi.runtime.Log;
 
 import java.nio.charset.Charset;
+import java.util.Date;
 
 /**
  * @author luffy
@@ -36,6 +34,14 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 responsePacket.setSuccess(false);
                 responsePacket.setReason("账号密码错误！");
             }
+            ByteBuf resBuffer = packetCode.encode(responsePacket);
+            ctx.channel().writeAndFlush(resBuffer);
+        }else if(packet instanceof MessageRequestPacket){
+            MessageRequestPacket requestPacket = (MessageRequestPacket)packet;
+            MessageResponsePacket responsePacket = new MessageResponsePacket();
+            responsePacket.setVersion(requestPacket.getVersion());
+            System.out.println(new Date()+"：收到客户端消息："+requestPacket.getMessage());
+            responsePacket.setMessage("你好！");
             ByteBuf resBuffer = packetCode.encode(responsePacket);
             ctx.channel().writeAndFlush(resBuffer);
         }
@@ -66,6 +72,13 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     private ByteBuf getByteBufForLoginFail(ChannelHandlerContext ctx){
         ByteBuf buffer = ctx.alloc().buffer();
         byte[] byteArray = ("登录失败！").getBytes(Charset.forName("utf-8"));
+        buffer.writeBytes(byteArray);
+        return buffer;
+    }
+
+    private ByteBuf getByteBufForMsg(ChannelHandlerContext ctx){
+        ByteBuf buffer = ctx.alloc().buffer();
+        byte[] byteArray = ("你好").getBytes(Charset.forName("utf-8"));
         buffer.writeBytes(byteArray);
         return buffer;
     }

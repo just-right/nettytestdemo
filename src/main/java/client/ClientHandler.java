@@ -4,13 +4,12 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.AttributeKey;
-import protocol.LoginRequestPacket;
-import protocol.LoginResponsePacket;
-import protocol.Packet;
-import protocol.PacketCode;
+import protocol.*;
 
 import java.nio.charset.Charset;
+import java.util.Date;
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  * @author luffy
@@ -36,17 +35,23 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
                 AttributeKey<String> nameAttrKey = AttributeKey.valueOf("userName");
                 AttributeKey<String> pwdAttrKey = AttributeKey.valueOf("passWord");
                 AttributeKey<Boolean> loginSuccessAttrKey = AttributeKey.valueOf("loginSuccess");
-
                 ctx.channel().attr(nameAttrKey).set(responsePacket.getUserName());
                 ctx.channel().attr(pwdAttrKey).set(responsePacket.getPassWord());
                 ctx.channel().attr(loginSuccessAttrKey).set(true);
                 System.out.println("登录成功！");
+                //发送消息给服务端
+                sendMsgToServer(ctx);
+
             }else {
                 ctx.channel().attr(AttributeKey.newInstance("loginSuccess")).set(false);
                 System.out.println("登录失败，失败原因："+responsePacket.getReason());
             }
-
-            this.loginRequest(ctx,"user-","password");
+            //this.loginRequest(ctx,"user-","password");
+        }else if(packet instanceof MessageResponsePacket){
+            MessageResponsePacket responsePacket = (MessageResponsePacket)packet;
+            String message = responsePacket.getMessage();
+            System.out.println(new Date()+"：收到服务端新消息："+message);
+            this.sendMsgToServer(ctx);
         }
     }
 
@@ -88,5 +93,19 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
         PacketCode packetCode = new PacketCode();
         ByteBuf buffer = packetCode.encode(requestPacket);
         ctx.channel().writeAndFlush(buffer);
+    }
+
+
+
+    private void sendMsgToServer(ChannelHandlerContext ctx){
+        PacketCode packetCode = new PacketCode();
+        MessageRequestPacket requestPacket = new MessageRequestPacket();
+        Scanner scanner = new Scanner(System.in);
+        String msg = scanner.nextLine();
+        requestPacket.setMessage(msg);
+        ByteBuf buffer = packetCode.encode(requestPacket);
+        ctx.channel().writeAndFlush(buffer);
+
+
     }
 }
