@@ -5,4 +5,4 @@
 
 1.2 重复登录验证
 
-1.3 策略模式重构
+1.3 使用ByteToMessageDecoder、SimpleChannelInboundHandler、MessageToByteEncoder重构pipeline通信链表
