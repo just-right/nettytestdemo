@@ -9,6 +9,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;
 import protocol.PacketDecoder;
 import protocol.PacketEncoder;
+import protocol.Spliter;
 
 /**
  * @author luffy
@@ -63,6 +64,7 @@ public class NettyServer {
 //                        //写数据逻辑-倒序执行
 //                        ch.pipeline().addLast("outboundA",new ServerOutBoundHandler());
 //                        ch.pipeline().addLast("outboundB",new SecondOutBoundServerHandler());
+                          ch.pipeline().addLast(new Spliter());
                           ch.pipeline().addLast(new PacketDecoder());
                           ch.pipeline().addLast(new LoginRequestHandler());
                           ch.pipeline().addLast(new MessageRequestHandler());
