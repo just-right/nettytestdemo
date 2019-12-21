@@ -15,8 +15,4 @@ public class LoginRequestPacket extends Packet{
         return Command.LOGIN_REQUEST;
     }
 
-    @Override
-    public Strategy getStrategy() {
-        return new LoginRequestStrategy();
-    }
 }

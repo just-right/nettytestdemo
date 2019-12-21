@@ -16,10 +16,5 @@ public abstract class Packet {
      */
     public abstract Byte getCommand();
 
-    /**
-     * 返回策略
-     * @return Strategy
-     */
-    public abstract Strategy getStrategy();
 
 }

@@ -31,9 +31,8 @@ public class PacketCode {
      * @param packet
      * @return ByteBuf
      */
-    public ByteBuf encode(Packet packet){
+    public void encode(ByteBuf buffer,Packet packet){
 
-        ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
         byte[] bytes = Serializer.DEFAULT.serializer(packet);
 
         //魔数-4Byte
@@ -48,9 +47,6 @@ public class PacketCode {
         buffer.writeInt(bytes.length);
         //数据
         buffer.writeBytes(bytes);
-
-        return buffer;
-
     }
 
 

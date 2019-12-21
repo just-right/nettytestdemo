@@ -14,8 +14,4 @@ public class MessageResponsePacket extends Packet{
         return Command.MESSAGE_RESPONSE;
     }
 
-    @Override
-    public Strategy getStrategy() {
-        return new MessageResponseStrategy();
-    }
 }
