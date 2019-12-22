@@ -10,7 +10,7 @@ import java.util.Map;
  * @author luffy
  **/
 public class PacketCode {
-    private static final int MAGIC_NUMBER = 0x12345678;
+    public static final int MAGIC_NUMBER = 0x12345678;
     private static final Map<Byte, Class<? extends Packet>> packetTypeMap;
     private static final Map<Byte, Serializer> serializerMap;
 
@@ -33,9 +33,8 @@ public class PacketCode {
      * @param packet
      * @return ByteBuf
      */
-    public ByteBuf encode(Packet packet){
+    public void encode(ByteBuf buffer,Packet packet){
 
-        ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
         byte[] bytes = Serializer.DEFAULT.serializer(packet);
 
         //魔数-4Byte
@@ -51,7 +50,7 @@ public class PacketCode {
         //数据
         buffer.writeBytes(bytes);
 
-        return buffer;
+//        return buffer;
 
     }
 

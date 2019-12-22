@@ -21,7 +21,7 @@ public class LoginConsoleCommand implements ConsoleCommand{
         requestPacket.setPassWord("pwd");
 
         channel.writeAndFlush(requestPacket);
-        waitForLoginResponse();
+//        waitForLoginResponse();
     }
 
     public static void waitForLoginResponse(){

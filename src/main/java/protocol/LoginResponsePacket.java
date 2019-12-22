@@ -7,6 +7,7 @@ import lombok.Data;
  **/
 @Data
 public class LoginResponsePacket extends Packet{
+    private String userId;
     private boolean success;
     private String userName;
     private String passWord;
@@ -16,8 +17,4 @@ public class LoginResponsePacket extends Packet{
         return Command.LOGIN_RESPONSE;
     }
 
-    @Override
-    public Strategy getStrategy() {
-        return new LoginResponseStrategy();
-    }
 }
