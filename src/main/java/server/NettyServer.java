@@ -1,6 +1,5 @@
 package server;
 
-import handlerlifecycle.LifeCyCleTestHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -8,6 +7,9 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;
+import protocol.PacketDecoder;
+import protocol.PacketEncoder;
+import protocol.Spliter;
 
 /**
  * @author luffy
@@ -48,8 +50,29 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch){
-                        ch.pipeline().addLast(new LifeCyCleTestHandler());
-                        ch.pipeline().addLast(new ServerHandler());
+                        //pipeline-channelHandlerContext(channelHandler) --> 双向链表
+                        /**
+                         * inboundA  -->  inboundB  -->  inboundC
+                         *                                  |
+                         *                                 ∨
+                         * outboundA <--  outboundB <--  outboundC
+                         *
+                         */
+                        //读数据逻辑链-顺序执行
+//                        ch.pipeline().addLast("inboundA",new ServerInBoundHandler());
+//                        ch.pipeline().addLast("inboundB",new SecondInBoundServerHandler());
+//                        //写数据逻辑-倒序执行
+//                        ch.pipeline().addLast("outboundA",new ServerOutBoundHandler());
+//                        ch.pipeline().addLast("outboundB",new SecondOutBoundServerHandler());
+                          ch.pipeline().addLast(new Spliter());
+                          ch.pipeline().addLast(new PacketDecoder());
+                          ch.pipeline().addLast(new LoginRequestHandler());
+                          ch.pipeline().addLast(new AuthHandler());
+                          ch.pipeline().addLast(new MessageRequestHandler());
+                          ch.pipeline().addLast(new CreateGroupRequestHandler());
+                          ch.pipeline().addLast(new PacketEncoder());
+
+
                     }
                 })
                 .handler(new ChannelInitializer<NioServerSocketChannel>() {
