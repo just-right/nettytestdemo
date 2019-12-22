@@ -20,8 +20,10 @@ public class MessageResponseHandler extends SimpleChannelInboundHandler<MessageR
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageResponsePacket responsePacket)  {
         String message = responsePacket.getMessage();
-        System.out.println(new Date()+"：收到服务端新消息："+message);
-        this.sendMsgToServer(ctx);
+        String fromUserId = responsePacket.getFromUserId();
+        String fromUserName = responsePacket.getFromUserName();
+        System.out.println(fromUserId+":"+fromUserName+" -> "+message);
+//        this.sendMsgToServer(ctx);
     }
 
     private void sendMsgToServer(ChannelHandlerContext ctx){

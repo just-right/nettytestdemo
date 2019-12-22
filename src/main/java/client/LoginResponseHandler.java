@@ -4,10 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.AttributeKey;
-import protocol.LoginRequestPacket;
-import protocol.LoginResponsePacket;
-import protocol.MessageRequestPacket;
-import protocol.PacketCode;
+import protocol.*;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -20,30 +17,23 @@ import java.util.Scanner;
 public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginResponsePacket> {
 
 
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) {
-        //发送登录请求
-        String userName = "user-";
-        String pwd = "password";
-        loginRequest(ctx, userName, pwd);
-//        sendMsgToServer(ctx);
-    }
+//    @Override
+//    public void channelActive(ChannelHandlerContext ctx) {
+//        //发送登录请求
+//        String userName = "user-";
+//        String pwd = "password";
+//        loginRequest(ctx, userName, pwd);
+////        sendMsgToServer(ctx);
+//    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginResponsePacket responsePacket) {
         if (responsePacket.isSuccess()) {
-            AttributeKey<String> nameAttrKey = AttributeKey.valueOf("userName");
-            AttributeKey<String> pwdAttrKey = AttributeKey.valueOf("passWord");
-            AttributeKey<Boolean> loginSuccessAttrKey = AttributeKey.valueOf("loginSuccess");
-            ctx.channel().attr(nameAttrKey).set(responsePacket.getUserName());
-            ctx.channel().attr(pwdAttrKey).set(responsePacket.getPassWord());
-            ctx.channel().attr(loginSuccessAttrKey).set(true);
-            System.out.println("登录成功！");
+            System.out.println("登录成功！UserID为："+responsePacket.getUserID());
             //发送消息给服务端
-            sendMsgToServer(ctx);
-
+//            sendMsgToServer(ctx);
+            SessionUtil.bindSession(new Session(responsePacket.getUserID(),responsePacket.getUserName()),ctx.channel());
         } else {
-            ctx.channel().attr(AttributeKey.newInstance("loginSuccess")).set(false);
             System.out.println("登录失败，失败原因：" + responsePacket.getReason());
         }
     }
