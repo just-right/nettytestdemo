@@ -3,6 +3,6 @@
 
 1.1 实现客户端服务端消息交互
 
-1.2 重复登录验证
+1.2 使用ByteToMessageDecoder、SimpleChannelInboundHandler、MessageToByteEncoder重构pipeline通信链表
 
-1.3 使用ByteToMessageDecoder、SimpleChannelInboundHandler、MessageToByteEncoder重构pipeline通信链表
+1.3 热插拔登录验证
