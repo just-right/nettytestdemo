@@ -26,6 +26,7 @@ public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginRespo
         String userName = "user-";
         String pwd = "password";
         loginRequest(ctx, userName, pwd);
+//        sendMsgToServer(ctx);
     }
 
     @Override
@@ -82,5 +83,10 @@ public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginRespo
         requestPacket.setMessage(msg);
 
         ctx.channel().writeAndFlush(requestPacket);
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx)  {
+        System.out.println("客户端连接关闭！");
     }
 }

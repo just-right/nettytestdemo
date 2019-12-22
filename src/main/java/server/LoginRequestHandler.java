@@ -4,6 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import protocol.LoginRequestPacket;
 import protocol.LoginResponsePacket;
+import protocol.ProtocolAttributes;
 
 /**
  * @author luffy
@@ -18,6 +19,8 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         LoginResponsePacket responsePacket = new LoginResponsePacket();
         responsePacket.setVersion(requestPacket.getVersion());
         if (loginValid(requestPacket)) {
+            //添加登录标识
+            ctx.channel().attr(ProtocolAttributes.LOGIN).set(true);
             responsePacket.setUserName(requestPacket.getUserName());
             responsePacket.setPassWord(requestPacket.getPassWord());
             responsePacket.setSuccess(true);
