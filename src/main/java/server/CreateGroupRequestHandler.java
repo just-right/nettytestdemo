@@ -1,12 +1,14 @@
 package server;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import protocol.CreateGroupRequestPacket;
 import protocol.CreateGroupResponsePacket;
+import protocol.Session;
 import protocol.SessionUtil;
 
 import java.util.ArrayList;
@@ -18,7 +20,9 @@ import java.util.UUID;
  * @version 1.0
  * @date 2019/12/22 21:31
  **/
+@ChannelHandler.Sharable
 public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<CreateGroupRequestPacket> {
+    public static final CreateGroupRequestHandler INSTANCE = new CreateGroupRequestHandler();
 
 
     @Override
@@ -38,15 +42,16 @@ public class CreateGroupRequestHandler extends SimpleChannelInboundHandler<Creat
         }
 
         CreateGroupResponsePacket responsePacket = new CreateGroupResponsePacket();
+        String groupId = randomGroupId();
         responsePacket.setSuccess(true);
-        responsePacket.setGroupId(randomGroupId());
+        responsePacket.setGroupId(groupId);
         responsePacket.setUserNameList(userNameList);
 
         group.writeAndFlush(responsePacket);
         System.out.println("群创建成功！群ID："+responsePacket.getGroupId());
         System.out.println("群成员包括："+responsePacket.getUserNameList());
 
-
+        SessionUtil.bindChannelGroup(groupId,group);
 
 
 

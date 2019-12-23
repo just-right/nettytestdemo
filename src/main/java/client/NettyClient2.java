@@ -44,7 +44,7 @@ public class NettyClient2 {
         ConsoleCommandManager manager = new ConsoleCommandManager();
         new Thread(() -> {
             while (!Thread.interrupted()) {
-                if (!SessionUtil.hasLogin(channel)) {
+                if (SessionUtil.getSession(channel)==null) {
                     loginConsoleCommand.exec(sc,channel);
                     waitForLoginResponse();
                 } else {
@@ -68,12 +68,20 @@ public class NettyClient2 {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     public void initChannel(SocketChannel ch){
+                        ch.pipeline().addLast(new IMIdleStateHandler());
                         ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder());
-                        ch.pipeline().addLast(new LoginResponseHandler());
-                        ch.pipeline().addLast(new MessageResponseHandler());
-                        ch.pipeline().addLast(new CreateGroupResponseHandler());
+                        ch.pipeline().addLast(LoginResponseHandler.INSTANCE);
+                        ch.pipeline().addLast(MessageResponseHandler.INSTANCE);
+                        ch.pipeline().addLast(CreateGroupResponseHandler.INSTANCE);
+                        ch.pipeline().addLast(JoinGroupResponseHandler.INSTANCE);
+                        ch.pipeline().addLast(QuitGroupResponseHandler.INSTANCE);
+                        ch.pipeline().addLast(ListGroupMembersResponseHandler.INSTANCE);
+                        ch.pipeline().addLast(LogoutResponseHandler.INSTANCE);
+                        ch.pipeline().addLast(SendToGroupResponseHandler.INSTANCE);
                         ch.pipeline().addLast(new PacketEncoder());
+
+                        ch.pipeline().addLast(new HeartBeatTimerHandler());
                     }
                 })
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS,5000)

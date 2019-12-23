@@ -1,15 +1,19 @@
 package server;
 
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import protocol.LoginUtil;
+import sun.dc.pr.PRError;
 
 /**
  * @author luffy
  * @version 1.0
  * @date 2019/12/22 14:28
  **/
+@ChannelHandler.Sharable
 public class AuthHandler extends ChannelInboundHandlerAdapter {
+    public static final AuthHandler INSTANCE = new AuthHandler();
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         if (!LoginUtil.hasLogin(ctx.channel())){

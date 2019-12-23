@@ -1,5 +1,6 @@
 package server;
 
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import protocol.*;
@@ -11,7 +12,9 @@ import java.util.UUID;
  * @version 1.0
  * @date 2019/12/20 22:42
  **/
+@ChannelHandler.Sharable
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
+    public static final LoginRequestHandler INSTANCE = new LoginRequestHandler();
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket requestPacket) {
@@ -33,7 +36,8 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
             System.out.println(requestPacket.getUserName()+"登录失败！");
             responsePacket.setReason("账号密码错误！");
         }
-        ctx.channel().writeAndFlush(responsePacket);
+//        ctx.channel().writeAndFlush(responsePacket);
+        ctx.writeAndFlush(responsePacket);
     }
 
     private boolean loginValid(LoginRequestPacket packet) {

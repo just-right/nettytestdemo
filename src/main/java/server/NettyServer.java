@@ -7,6 +7,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;
+import protocol.HeartbeatResponsePacket;
 import protocol.PacketDecoder;
 import protocol.PacketEncoder;
 import protocol.Spliter;
@@ -64,13 +65,25 @@ public class NettyServer {
 //                        //写数据逻辑-倒序执行
 //                        ch.pipeline().addLast("outboundA",new ServerOutBoundHandler());
 //                        ch.pipeline().addLast("outboundB",new SecondOutBoundServerHandler());
+                          ch.pipeline().addLast(new IMIdleStateHandler());
                           ch.pipeline().addLast(new Spliter());
-                          ch.pipeline().addLast(new PacketDecoder());
-                          ch.pipeline().addLast(new LoginRequestHandler());
-                          ch.pipeline().addLast(new AuthHandler());
-                          ch.pipeline().addLast(new MessageRequestHandler());
-                          ch.pipeline().addLast(new CreateGroupRequestHandler());
-                          ch.pipeline().addLast(new PacketEncoder());
+//                          ch.pipeline().addLast(new PacketDecoder());
+                          ch.pipeline().addLast(PacketCodeHandler.INSTANCE);
+                          ch.pipeline().addLast(LoginRequestHandler.INSTANCE);
+                          ch.pipeline().addLast(HeartBeatRequestHandler.INSTANCE);
+                          ch.pipeline().addLast(AuthHandler.INSTANCE);
+                          ch.pipeline().addLast(IMHandler.INSTANCE);
+//                          ch.pipeline().addLast(MessageRequestHandler.INSTANCE);
+//                          ch.pipeline().addLast(CreateGroupRequestHandler.INSTANCE);
+//
+//                          ch.pipeline().addLast(JoinGroupRequestHandler.INSTANCE);
+//                          ch.pipeline().addLast(LogoutRequestHandler.INSTANCE);
+//                          ch.pipeline().addLast(ListGroupMembersRequestHandler.INSTANCE);
+//                          ch.pipeline().addLast(QuitGroupRequestHandler.INSTANCE);
+//
+//                          ch.pipeline().addLast(SendToGroupRequestHandler.INSTANCE);
+
+//                          ch.pipeline().addLast(new PacketEncoder());
 
 
                     }

@@ -1,6 +1,7 @@
 package client;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.AttributeKey;
@@ -14,8 +15,9 @@ import java.util.Scanner;
  * @version 1.0
  * @date 2019/12/20 22:51
  **/
+@ChannelHandler.Sharable
 public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginResponsePacket> {
-
+    public static final LoginResponseHandler INSTANCE = new LoginResponseHandler();
 
 //    @Override
 //    public void channelActive(ChannelHandlerContext ctx) {
