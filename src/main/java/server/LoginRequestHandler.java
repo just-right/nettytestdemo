@@ -23,6 +23,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
             ctx.channel().attr(ProtocolAttributes.LOGIN).set(true);
             System.out.println(requestPacket.getUserName()+"登录成功！");
             String userId = randomUserId();
+            //存入Session
             SessionUtil.bindSession(new Session(userId,requestPacket.getUserName()),ctx.channel());
             responsePacket.setUserName(requestPacket.getUserName());
             responsePacket.setPassWord(requestPacket.getPassWord());
@@ -33,7 +34,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
             System.out.println(requestPacket.getUserName()+"登录失败！");
             responsePacket.setReason("账号密码错误！");
         }
-        ctx.channel().writeAndFlush(responsePacket);
+        ctx.channel().write(responsePacket);
     }
 
     private boolean loginValid(LoginRequestPacket packet) {
@@ -51,6 +52,14 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
 
     @Override
     public void channelActive(ChannelHandlerContext ctx){
+        /**
+         * 解除Session
+         */
         SessionUtil.unBindSession(ctx.channel());
+    }
+
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        ctx.channel().flush();
     }
 }

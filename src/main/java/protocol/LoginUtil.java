@@ -14,11 +14,20 @@ import java.util.jar.Attributes;
  **/
 public class LoginUtil {
 
-
+    /**
+     * 设置登录标志
+     * channel.attr - AttributeKey
+     * @param channel
+     */
     public static void setLogin(Channel channel){
       channel.attr(AttributeKey.newInstance("login")).set(true);
     }
 
+    /**
+     * 判断是否登录
+     * channel.attr - AttributeKey
+     * @param channel
+     */
     public static boolean hasLogin(Channel channel){
 
        Attribute<Boolean> loginAttr = channel.attr(ProtocolAttributes.LOGIN);

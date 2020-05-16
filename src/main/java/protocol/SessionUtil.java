@@ -11,10 +11,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2019/12/22 15:03
  **/
 public class SessionUtil {
+    /**
+     * userID ---- Channel 对应
+     */
     private static final Map<String,Channel> userIdChannelMap = new ConcurrentHashMap<>();
 
     public static void bindSession(Session session,Channel channel){
         userIdChannelMap.put(session.getUserId(),channel);
+        //设置channel attr属性
         channel.attr(ProtocolAttributes.SESSION).set(session);
     }
 

@@ -36,12 +36,19 @@ public class NettyClient {
         });
     }
 
+    /**
+     * 交互 -------------- 控制台
+     * @param channel
+     */
     private static void startConsoleThread(Channel channel) {
         Scanner sc = new Scanner(System.in);
         LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
 
         new Thread(() -> {
             while (!Thread.interrupted()) {
+                /**
+                 * 未登录
+                 */
                 if (!SessionUtil.hasLogin(channel)) {
                     System.out.print("输入用户名登录: ");
                     String username = sc.nextLine();
@@ -53,7 +60,11 @@ public class NettyClient {
                     // 发送登录数据包
                     channel.writeAndFlush(loginRequestPacket);
                     waitForLoginResponse();
-                } else {
+                }
+                /**
+                 * 客户端单聊
+                 */
+                else {
                     String toUserId = sc.next();
                     String message = sc.next();
                     channel.writeAndFlush(new MessageRequestPacket(toUserId, message));

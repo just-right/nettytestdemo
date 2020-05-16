@@ -11,7 +11,9 @@ import java.util.Map;
  **/
 public class PacketCode {
     public static final int MAGIC_NUMBER = 0x12345678;
+    //指令-数据Map
     private static final Map<Byte, Class<? extends Packet>> packetTypeMap;
+    //序列化算法Map
     private static final Map<Byte, Serializer> serializerMap;
 
     static {
@@ -49,7 +51,11 @@ public class PacketCode {
         buffer.writeBytes(bytes);
     }
 
-
+    /**
+     * 解码
+     * @param buffer
+     * @return
+     */
     public Packet decode(ByteBuf buffer){
         //跳过魔数、版本号-
         buffer.skipBytes(4);

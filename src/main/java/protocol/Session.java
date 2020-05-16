@@ -9,6 +9,12 @@ import lombok.Data;
  **/
 @Data
 public class Session {
+    /**
+     * 登录用户信息
+     * userID - 对应 - userName
+     * @param userId
+     * @param userName
+     */
     public Session(String userId, String userName) {
         this.userId = userId;
         this.userName = userName;

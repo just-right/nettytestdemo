@@ -27,6 +27,7 @@ public class MessageRequestHandler extends SimpleChannelInboundHandler<MessageRe
         responsePacket.setFromUserName(session.getUserName());
 //        System.out.println(new Date()+"：收到客户端消息："+messageRequestPacket.getMessage());
         responsePacket.setMessage(messageRequestPacket.getMessage());
+        //获取要发送消息对象的Channel
         Channel toUserChannel = SessionUtil.getChannel(messageRequestPacket.getToUserId());
         if (toUserChannel!=null && SessionUtil.hasLogin(toUserChannel)){
             toUserChannel.writeAndFlush(responsePacket);
