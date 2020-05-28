@@ -1,5 +1,6 @@
 package client;
 
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import protocol.HeartbeatRequestPacket;
@@ -11,6 +12,7 @@ import java.util.concurrent.TimeUnit;
  * @version 1.0
  * @date 2019/12/23 16:34
  **/
+@ChannelHandler.Sharable
 public class HeartBeatTimerHandler extends ChannelInboundHandlerAdapter {
 
     private static final int HEARTBEAT_INTERVAL = 5;

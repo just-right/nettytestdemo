@@ -1,6 +1,5 @@
 package protocol;
 
-import com.sun.org.apache.regexp.internal.RE;
 import lombok.Data;
 
 import java.util.List;

@@ -40,6 +40,10 @@ public class PacketCode {
         packetTypeMap.put(Command.HEARTBEAT_REQUEST,HeartbeatRequestPacket.class);
         packetTypeMap.put(Command.HEARTBEAT_RESPONSE, HeartbeatResponsePacket.class);
 
+        packetTypeMap.put(Command.GET_FILE_REQUEST,GetFileRequestPacket.class);
+        packetTypeMap.put(Command.GET_FILE_RESPONSE, GetFileResponsePacket.class);
+
+
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
         serializerMap.put(serializer.getSerializerMethod(), serializer);

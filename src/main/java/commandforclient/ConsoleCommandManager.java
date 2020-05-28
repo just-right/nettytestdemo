@@ -24,6 +24,7 @@ public class ConsoleCommandManager implements ConsoleCommand{
         map.put("quitGroup", new QuitGroupConsoleCommand());
         map.put("listGroupMembers", new ListGroupMembersConsoleCommand());
         map.put("sendToGroup", new SendToGroupConsoleCommand());
+        map.put("getFile", new GetFileConsoleCommand());
 
     }
 

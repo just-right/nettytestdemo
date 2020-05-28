@@ -1,5 +1,6 @@
 package client;
 
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
@@ -11,6 +12,7 @@ import java.util.concurrent.TimeUnit;
  * @version 1.0
  * @date 2019/12/23 16:20
  **/
+@ChannelHandler.Sharable
 public class IMIdleStateHandler extends IdleStateHandler {
     private static final int READER_IDLE_TIME = 15;
 

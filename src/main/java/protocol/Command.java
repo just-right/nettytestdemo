@@ -25,6 +25,9 @@ public interface Command {
     Byte HEARTBEAT_REQUEST = 17;
     Byte HEARTBEAT_RESPONSE = 18;
 
+    Byte GET_FILE_REQUEST = 19;
+    Byte GET_FILE_RESPONSE = 20;
+
 
 
 

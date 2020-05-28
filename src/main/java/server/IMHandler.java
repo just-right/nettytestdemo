@@ -36,6 +36,8 @@ public class IMHandler extends SimpleChannelInboundHandler<Packet> {
         handlerMap.put(Command.SEND_GROUP_REQUEST,SendToGroupRequestHandler.INSTANCE);
         handlerMap.put(Command.LOGOUT_REQUEST,LogoutRequestHandler.INSTANCE);
 
+        handlerMap.put(Command.GET_FILE_REQUEST,GetFileRequestHandler.INSTANCE);
+
     }
 
     @Override

@@ -76,6 +76,7 @@ public class NettyClient2 {
                         ch.pipeline().addLast(CreateGroupResponseHandler.INSTANCE);
                         ch.pipeline().addLast(JoinGroupResponseHandler.INSTANCE);
                         ch.pipeline().addLast(QuitGroupResponseHandler.INSTANCE);
+                        ch.pipeline().addLast(GetFileResponseHandler.INSTANCE);
                         ch.pipeline().addLast(ListGroupMembersResponseHandler.INSTANCE);
                         ch.pipeline().addLast(LogoutResponseHandler.INSTANCE);
                         ch.pipeline().addLast(SendToGroupResponseHandler.INSTANCE);
